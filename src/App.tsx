@@ -1,37 +1,42 @@
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import Page1 from './pages/Page1';
+import Page2 from './pages/Page2';
+import Page3 from './pages/Page3';
 
-/* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
+const NotFound = () => {
+  console.log('rendering NotFound');
+  return <div>Not Found</div>;
+};
 
-/* Basic CSS for apps built with Ionic */
-import '@ionic/react/css/normalize.css';
-import '@ionic/react/css/structure.css';
-import '@ionic/react/css/typography.css';
-
-/* Optional CSS utils that can be commented out */
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
-
-/* Theme variables */
-import './theme/variables.css';
-
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  const [counter, setCounter] = useState(0);
+  const handleIncrement = () => setCounter(counter + 1);
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Switch>
+            <Route exact path="/" render={() => <Redirect to="/page1" />} />
+            <Route exact path="/page1">
+              <Page1 counter={counter} onIncrement={handleIncrement} />
+            </Route>
+            <Route exact path="/page2">
+              <Page2 counter={counter} onIncrement={handleIncrement} />
+            </Route>
+            <Route exact path="/page3">
+              <Page3 counter={counter} onIncrement={handleIncrement} />
+            </Route>
+            <Route path="/">
+              <NotFound />
+            </Route>
+          </Switch>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
